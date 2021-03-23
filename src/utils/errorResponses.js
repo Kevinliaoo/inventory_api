@@ -20,13 +20,41 @@ module.exports = {
         results: null,
     }, 
     errorCreating: {
-        // Error when could not create a new Product
-        error: new Error('Error creating this Product'), 
+        // Error when could not create a new Product or User
+        error: new Error('Error creating'), 
         results: null,
     },
     couldNotAddInfo: _id => ({
         // Error when could not add info 
         error: new Error('Could not load Product info'), 
         results: null,
-    })
+    }),
+    incorrectDateFormat: {
+        error: new Error('Incorrect date format'), 
+        results: null
+    }, 
+    alreadyExists: { 
+        error: new Error("ID already registered"), 
+        results: null 
+    }, 
+    userNotFound: username => ({
+        error: new Error(`User ${username} not found`), 
+        results: null,
+    }), 
+    userAlreadyExists: username => ({
+        error: new Error(`User with username: ${username} already exists!`), 
+        results: null,
+    }),
+    incorrectPassword: {
+        error: new Error('Incorrect password'), 
+        results: null
+    },
+    errorAdmins: {
+        error: new Error('Error finding admin users'), 
+        results: null,
+    },
+    usersNotFound: {
+        error: new Error('Users not found'), 
+        results: null,
+    }
 }

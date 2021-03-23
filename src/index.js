@@ -7,6 +7,7 @@ const typeDefs = require('./schema');
 const resolvers = require('./resolvers');
 
 const ProductAPI = require('./datasources/ProductAPI');
+const UsersAPI = require('./datasources/UsersAPI');
 
 db.authenticate()
     .then(() => console.log('Database connected!'))
@@ -17,6 +18,7 @@ const server = new ApolloServer({
     resolvers, 
     dataSources: () => ({
         productAPI: new ProductAPI(),
+        userAPI: new UsersAPI(),
     })
 })
 
