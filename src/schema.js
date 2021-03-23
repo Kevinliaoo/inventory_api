@@ -89,7 +89,7 @@ const typeDefs = gql`
         "Diminish stock"
         removeStock(_id: String!, "Units to remove" toRemove: Int!): Product
         "Create a new user"
-        createUser(userInfo: CreateUserInput!): User
+        createUser(userInfo: CreateUserInput!): String!
     }
 `;
 

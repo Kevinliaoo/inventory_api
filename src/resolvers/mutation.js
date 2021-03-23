@@ -1,22 +1,26 @@
-const errorResponses = require("../utils/errorResponses");
+const error = require('../utils/errors');
 
 const Mutation = {
-    createProduct: async (_, { inputData }, { dataSources }) => {
+    createProduct: async (_, { inputData }, { dataSources, authorization }) => {
+        if(authorization !== 1) throw error.notAdminUser;
         const { error, results } = await dataSources.productAPI.createNewProduct(inputData);
         if(error) throw error; 
         return results;
     }, 
-    updateProductInfo: async (_, { _id, inputData }, { dataSources }) => {
+    updateProductInfo: async (_, { _id, inputData }, { dataSources, authorization }) => {
+        if(authorization !== 1) throw error.notAdminUser;
         const { error, results } = await dataSources.productAPI.updateProductInfo(_id, inputData);
         if(error) throw error;
         return results
     },
-    changePrice: async (_, { _id, newPrice }, { dataSources }) => {
+    changePrice: async (_, { _id, newPrice }, { dataSources, authorization }) => {
+        if(authorization !== 1) throw error.notAdminUser;
         const { error, results } = await dataSources.productAPI.updatePrice(_id, newPrice);
         if(error) throw error; 
         return results;
     }, 
-    changePricePercentage: async (_, { _id, percentage }, { dataSources }) => {
+    changePricePercentage: async (_, { _id, percentage }, { dataSources, authorization }) => {
+        if(authorization !== 1) throw error.notAdminUser;
         const { error, results } = await dataSources.productAPI.getProductById(_id); 
         if(error) throw error; 
         const newPrice = results.price * (1 + percentage / 100);
@@ -24,7 +28,8 @@ const Mutation = {
         if(updated.error) throw updated.error; 
         return updated.results;
     },
-    changeAllPricesPercentage: async (_, { ids, percentage }, { dataSources }) => {
+    changeAllPricesPercentage: async (_, { ids, percentage }, { dataSources, authorization }) => {
+        if(authorization !== 1) throw error.notAdminUser;
         let products = []; 
         try {
             !ids || ids.length === 0
@@ -45,12 +50,14 @@ const Mutation = {
             }
         })
     },
-    changeStock: async (_, { _id, newStock }, { dataSources }) => {
+    changeStock: async (_, { _id, newStock }, { dataSources, authorization }) => {
+        if(authorization !== 1) throw error.notAdminUser;
         const { error, results } = await dataSources.productAPI.changeStock(_id, newStock); 
         if(error) throw error; 
         return results;
     }, 
-    addStock: async (_, { _id, toAdd }, { dataSources }) => {
+    addStock: async (_, { _id, toAdd }, { dataSources, authorization }) => {
+        if(authorization !== 1) throw error.notAdminUser;
         const product = await dataSources.productAPI.getProductById(_id); 
         if(product.error) throw error; 
         const newStock = product.results.stock + toAdd; 
@@ -58,7 +65,8 @@ const Mutation = {
         if(error) throw error; 
         return results; 
     }, 
-    removeStock: async (_, { _id, toRemove }, { dataSources }) => {
+    removeStock: async (_, { _id, toRemove }, { dataSources, authorization }) => {
+        if(authorization !== 1) throw error.notAdminUser;
         const product = await dataSources.productAPI.getProductById(_id); 
         if(product.error) throw error; 
         const newStock = product.results.stock - toRemove; 
@@ -67,10 +75,11 @@ const Mutation = {
         return results; 
     },
 
-    createUser: async (_, { userInfo }, { dataSources }) => {
+    createUser: async (_, { userInfo }, { dataSources, authorization }) => {
+        if(authorization !== 1) throw error.notAdminUser;
         const { error, results } = await dataSources.userAPI.createNewUser(userInfo);
         if(error) throw error; 
-        return results;
+        return results.username;
     }
 }
 
