@@ -90,6 +90,10 @@ const typeDefs = gql`
         removeStock(_id: String!, "Units to remove" toRemove: Int!): Product
         "Create a new user"
         createUser(userInfo: CreateUserInput!): String!
+        "Convert a user to admin user"
+        makeAdmin(uid: Int): Boolean!
+        "Convert logged user a not admin user"
+        removeAdmin: Boolean!
     }
 `;
 

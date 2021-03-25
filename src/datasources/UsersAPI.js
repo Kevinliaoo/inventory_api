@@ -15,6 +15,11 @@ class ProductAPI extends DataSource {
         this.context = config.context;
     }
 
+    async _checkIfExistsId(uid) {
+        const res = await this.getUserById(uid); 
+        return res.results ? true : false; 
+    }
+
     async _checkIfExists(_id) {
         _id = _id.trim().toUpperCase();
         const res = await this.getUserByUsername(_id); 
@@ -87,6 +92,26 @@ class ProductAPI extends DataSource {
         if(!res) return errorResponses.incorrectPassword; 
         delete results.password; 
         return { error: null, results };
+    }
+
+    async makeAdmin(uid) {
+        const exists = await this._checkIfExistsId(uid); 
+        if(!exists) return errorResponses.userNotFound(uid);
+        try {
+            const res = await model.update({ is_admin: 1 }, { where: { uid: uid } });
+            return { error: null, results: true }; 
+        } catch(e) {
+            return { error: null, results: false }; 
+        }
+    }
+
+    async removeAdmin(uid) {
+        try {
+            const res = await model.update({ is_admin: 0 }, { where: { uid } }); 
+            return { error: null, results: true }; 
+        } catch(e) {
+            return { error: null, results: false };
+        }
     }
 }
 

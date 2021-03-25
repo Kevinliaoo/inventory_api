@@ -80,6 +80,21 @@ const Mutation = {
         const { error, results } = await dataSources.userAPI.createNewUser(userInfo);
         if(error) throw error; 
         return results.username;
+    },
+
+    makeAdmin: async (_, { uid }, { dataSources, authorization }) => {
+        if(authorization !== 1) throw error.notAdminUser; 
+        const { error, results } = await dataSources.userAPI.makeAdmin(uid); 
+        if(error) throw error; 
+        return results;
+    },
+
+    removeAdmin: async (_, __, { dataSources, authorization, loggedUser }) => {
+        if(authorization !==1) return true;  
+        const { error, results } = await dataSources.userAPI.removeAdmin(loggedUser.uid);
+        if(error) throw error; 
+        console.log('Estoy teniendo el resultado, ', results)
+        return results;
     }
 }
 

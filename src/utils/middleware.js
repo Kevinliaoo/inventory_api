@@ -23,7 +23,10 @@ module.exports = async ({ req }) => {
     if(jwt === '') return no_jwt; 
     try {
         const res = auth.verify(jwt);
-        if(res.is_admin === 1) return is_admin
+        if(res.is_admin === 1) return {
+            ...is_admin, 
+            loggedUser: res
+        }
         else return no_admin
     } catch(e) {
         return no_jwt;
